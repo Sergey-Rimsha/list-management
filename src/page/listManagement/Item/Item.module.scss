@@ -1,0 +1,34 @@
+.item {
+	display: flex;
+	justify-content: space-between;
+	padding: 5px;
+	box-shadow:  0 0 4px 1px grey;
+	border-radius: 2px;
+
+	&__wrapElement {
+		display: flex;
+		align-items: center;
+	}
+
+	&__name {
+		margin-left: 15px;
+	}
+
+	&__checkbox {
+		display: flex;
+	}
+
+	&__button {
+		margin-left: 15px;
+
+		& button {
+			width: 60px;
+			height: 30px;
+			border: none;
+			border-radius: 5px;
+			background-color: red;
+			color: white;
+			cursor: pointer;
+		}
+	}
+}
