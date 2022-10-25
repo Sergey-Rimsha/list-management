@@ -1,5 +1,7 @@
+import {v4 as uuidv4} from 'uuid';
+
 import {ListManagement} from "./ListManagement";
-import {useState} from "react";
+import React, {useState} from "react";
 
 export type StateListType = {
 	id: string
@@ -13,10 +15,10 @@ export type StateItemsType = {
 export type ItemType = {
 	id: string
 	name: string,
-	active: boolean
+	checked: boolean
 }
 
-export const ListManagementContainer = () => {
+export const ListManagementContainer = React.memo(() => {
 
 	const [stateList, setSateList] = useState<StateListType[]>([
 		{id: '1', name: 'list 1'},
@@ -26,33 +28,115 @@ export const ListManagementContainer = () => {
 
 	const [stateItems, setStateItems] = useState<StateItemsType>( {
 		'1': [
-			{id: '1', name: 'Item-1', active: false},
-			{id: '2', name: 'Item-2', active: false},
-			{id: '3', name: 'Item-3', active: false},
+			{id: uuidv4(), name: 'Item-1', checked: false},
+			{id: uuidv4(), name: 'Item-2', checked: false},
+			{id: uuidv4(), name: 'Item-3', checked: false},
 		],
 		'2': [
-			{id: '1', name: 'Item-1', active: false},
-			{id: '2', name: 'Item-2', active: false},
-			{id: '3', name: 'Item-3', active: false},
+			{id: uuidv4(), name: 'Item-1', checked: false},
+			{id: uuidv4(), name: 'Item-2', checked: false},
+			{id: uuidv4(), name: 'Item-3', checked: false},
 		],
 		'3': [
-			{id: '1', name: 'Item-1', active: false},
-			{id: '2', name: 'Item-2', active: false},
-			{id: '3', name: 'Item-3', active: false},
+			{id: uuidv4(), name: 'Item-1', checked: false},
+			{id: uuidv4(), name: 'Item-2', checked: false},
+			{id: uuidv4(), name: 'Item-3', checked: false},
 		],
 	});
 
+	// create new item list
 	const addNewItemList = (listId: string, name: string) => {
 
-		const id = '4';
+		const id = uuidv4();
+		const newItem = {id, name, checked: false};
 
-		const newItem = {id, name, active: false};
-		setStateItems({...stateItems, [listId]: [...stateItems[listId], newItem]})
+		setStateItems({
+			...stateItems,
+			[listId]: [...stateItems[listId], newItem]
+		});
+	};
+
+	// delete item list
+	const deleteItemList = (listId: string, itemId: string) => {
+
+		setStateItems({
+			...stateItems,
+			[listId]: stateItems[listId].filter(item => item.id !== itemId)
+		});
+	};
+
+	// get next List id
+	const getNextListId = (listIndex: number, listId: string) => {
+		let nextListId;
+
+		if (listIndex + 1 === stateList.length) {
+			nextListId = stateList[0].id;
+		} else {
+			nextListId = stateList[listIndex + 1].id;
+		}
+
+		return nextListId;
 	}
+
+	//move all item to next list
+	const moveAllItemsList = (listIndex: number, listId: string) => {
+
+		const nextListId = getNextListId(listIndex, listId);
+
+		setStateItems({
+			...stateItems,
+			[nextListId]: [...stateItems[nextListId], ...stateItems[listId]],
+			[listId]: []
+		});
+	}
+
+	// checkbox checked item
+	const checkedListItem = (listId: string, itemId: string, checked: boolean) => {
+
+		setStateItems({
+			...stateItems,
+			[listId]:
+				stateItems[listId].map(item => {
+					if (item.id === itemId) {
+						return {...item, checked}
+					} else {
+						return item
+					}
+				})
+		});
+	};
+
+	//move items to next List only checked = true
+	const moveListItems = (listIndex: number, listId: string) => {
+
+		const nextListId = getNextListId(listIndex, listId);
+
+		// copy items checked = true
+		let itemsChecked = [...stateItems[listId].filter(item => item.checked)];
+
+		// replace items checked = false
+		itemsChecked = itemsChecked.map(item => ({...item, checked: false}))
+
+			setStateItems({
+				...stateItems,
+				[nextListId]: [...stateItems[nextListId], ...itemsChecked],
+				[listId]: stateItems[listId].filter(item => !item.checked)
+			})
+
+	}
+
 
 	return (
 		<>
-			<ListManagement lists={stateList} items={stateItems}/>
+			<ListManagement
+				lists={stateList}
+				items={stateItems}
+				addNewItemList={addNewItemList}
+				deleteItemList={deleteItemList}
+				moveAllItemsList={moveAllItemsList}
+				checkedListItem={checkedListItem}
+				moveListItems={moveListItems}
+			/>
 		</>
 	)
-}
+});
