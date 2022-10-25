@@ -9,7 +9,7 @@ export type StateListType = {
 }
 
 export type StateItemsType = {
-	[id: string]: Array<ItemType>
+	[id: string]: ItemType[]
 }
 
 export type ItemType = {
