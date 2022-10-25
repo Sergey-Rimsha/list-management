@@ -14,7 +14,7 @@ export type StateItemsType = {
 
 export type ItemType = {
 	id: string
-	name: string,
+	name: string
 	checked: boolean
 }
 
@@ -72,10 +72,11 @@ export const ListManagementContainer = React.memo(() => {
 			...stateItems,
 			[listId]: stateItems[listId].map(item => item.id === itemId ? {...item, name} : item)
 		});
-	}
+	};
 
 	// get next List id
 	const getNextListId = (listId: string) => {
+
 		let nextListId = '0';
 
 		stateList.forEach((list, index) => {
@@ -94,6 +95,7 @@ export const ListManagementContainer = React.memo(() => {
 	//move all item to next list
 	const moveAllItemsList = (listId: string) => {
 
+		//get nextListId
 		const nextListId = getNextListId(listId);
 
 		setStateItems({
@@ -109,33 +111,29 @@ export const ListManagementContainer = React.memo(() => {
 		setStateItems({
 			...stateItems,
 			[listId]:
-				stateItems[listId].map(item => {
-					if (item.id === itemId) {
-						return {...item, checked}
-					} else {
-						return item
-					}
-				})
+				stateItems[listId].map(item => item.id === itemId ? {...item, checked} : item)
 		});
+
 	};
 
 	//move items to next List only checked = true
 	const moveListItems = (listId: string) => {
 
+		//get nextListId
 		const nextListId = getNextListId(listId);
 
 		// copy items checked = true
 		let itemsChecked = [...stateItems[listId].filter(item => item.checked)];
 
 		// replace items checked = false
-		itemsChecked = itemsChecked.map(item => ({...item, checked: false}))
+		itemsChecked = itemsChecked.map(item => ({...item, checked: false}));
 
 		if (itemsChecked.length >= 1) {
 			setStateItems({
 				...stateItems,
 				[nextListId]: [...stateItems[nextListId], ...itemsChecked],
 				[listId]: stateItems[listId].filter(item => !item.checked)
-			})
+			});
 		}
 	};
 
