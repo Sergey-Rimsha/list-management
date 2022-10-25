@@ -5,21 +5,19 @@ import {ItemType} from "../ListManagementContainer";
 import React, {ChangeEvent, useCallback, useState} from "react";
 
 type PropsType = {
-	listIndex: number
 	listId: string
 	name: string
 	items: ItemType[]
 	addNewItemList: (listId: string, name: string) => void
 	deleteItemList: (listId: string, itemId: string) => void
-	moveAllItemsList: (listIndex: number, listId: string) => void
+	moveAllItemsList: (listId: string) => void
 	checkedListItem: (listId: string, itemId: string, checked: boolean) => void
-	moveListItems: (listIndex: number, listId: string) => void
+	moveListItems: (listId: string) => void
 }
 
 export const List = React.memo((props: PropsType) => {
 
 	const {
-		listIndex,
 		listId,
 		name,
 		items,
@@ -47,17 +45,17 @@ export const List = React.memo((props: PropsType) => {
 		deleteItemList(listId, id);
 	},[deleteItemList, listId]);
 
-	const onMoveAllItems = useCallback(() => {
-		moveAllItemsList(listIndex, listId);
-	},[listId, listIndex, moveAllItemsList]);
-
 	const onCheckedItem = useCallback((itemId: string, checked: boolean) => {
 		checkedListItem(listId, itemId, checked)
 	},[checkedListItem, listId]);
 
+	const onMoveAllItems = useCallback(() => {
+		moveAllItemsList(listId);
+	},[listId, moveAllItemsList]);
+
 	const onMoveItems = useCallback(() => {
-		moveListItems(listIndex, listId);
-	},[listId, listIndex, moveListItems]);
+		moveListItems(listId);
+	},[listId, moveListItems]);
 
 	return (
 		<div className={`${s.listManagement__list} ${s.list}`}>

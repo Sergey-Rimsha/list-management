@@ -9,9 +9,9 @@ type PropsType = {
 	items: StateItemsType
 	addNewItemList: (listId: string, name: string) => void
 	deleteItemList: (listId: string, itemId: string) => void
-	moveAllItemsList: (listIndex: number, ListId: string) => void
+	moveAllItemsList: (ListId: string) => void
 	checkedListItem: (listId: string, itemId: string, checked: boolean) => void
-	moveListItems: (listIndex: number, listId: string) => void
+	moveListItems: (listId: string) => void
 }
 
 export const ListManagement = React.memo((props: PropsType) => {
@@ -29,11 +29,10 @@ export const ListManagement = React.memo((props: PropsType) => {
 	return (
 		<section className={s.listManagement}>
 			{
-				lists.map((list, index) => {
+				lists.map(list => {
 					return (
 						<List
 							key={list.id}
-							listIndex={index}
 							listId={list.id}
 							name={list.name}
 							items={items[list.id]}
