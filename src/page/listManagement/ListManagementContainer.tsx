@@ -65,6 +65,20 @@ export const ListManagementContainer = React.memo(() => {
 		});
 	};
 
+	const renameItemList = (listId: string, itemId: string, name: string) => {
+
+		setStateItems({
+			...stateItems,
+			[listId]: stateItems[listId].map(item => {
+				if (item.id === itemId) {
+					return {...item, name}
+				} else {
+					return item
+				}
+			})
+		});
+	}
+
 	// get next List id
 	const getNextListId = (listId: string) => {
 		let nextListId = '0';
@@ -141,6 +155,7 @@ export const ListManagementContainer = React.memo(() => {
 				moveAllItemsList={moveAllItemsList}
 				checkedListItem={checkedListItem}
 				moveListItems={moveListItems}
+				renameItemList={renameItemList}
 			/>
 		</>
 	)

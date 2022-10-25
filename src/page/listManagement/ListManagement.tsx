@@ -12,6 +12,7 @@ type PropsType = {
 	moveAllItemsList: (ListId: string) => void
 	checkedListItem: (listId: string, itemId: string, checked: boolean) => void
 	moveListItems: (listId: string) => void
+	renameItemList: (listId: string, itemId: string, name: string) => void
 }
 
 export const ListManagement = React.memo((props: PropsType) => {
@@ -24,6 +25,7 @@ export const ListManagement = React.memo((props: PropsType) => {
 		moveAllItemsList,
 		checkedListItem,
 		moveListItems,
+		renameItemList,
 	} = props;
 
 	return (
@@ -41,6 +43,7 @@ export const ListManagement = React.memo((props: PropsType) => {
 							moveAllItemsList={moveAllItemsList}
 							checkedListItem={checkedListItem}
 							moveListItems={moveListItems}
+							renameItemList={renameItemList}
 						/>
 					)
 				})

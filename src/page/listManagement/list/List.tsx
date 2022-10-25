@@ -13,6 +13,7 @@ type PropsType = {
 	moveAllItemsList: (listId: string) => void
 	checkedListItem: (listId: string, itemId: string, checked: boolean) => void
 	moveListItems: (listId: string) => void
+	renameItemList: (listId: string, itemId: string, name: string) => void
 }
 
 export const List = React.memo((props: PropsType) => {
@@ -26,6 +27,7 @@ export const List = React.memo((props: PropsType) => {
 		moveAllItemsList,
 		checkedListItem,
 		moveListItems,
+		renameItemList,
 	} = props;
 
 	const [newItemName, setNewItemName] = useState<string>('');
@@ -57,6 +59,10 @@ export const List = React.memo((props: PropsType) => {
 		moveListItems(listId);
 	},[listId, moveListItems]);
 
+	const onRenameItem = useCallback((itemId: string, name: string) => {
+		renameItemList(listId, itemId, name)
+	}, [listId, renameItemList])
+
 	return (
 		<div className={`${s.listManagement__list} ${s.list}`}>
 			<div className={s.list__title}>
@@ -80,6 +86,7 @@ export const List = React.memo((props: PropsType) => {
 									checked={item.checked}
 									onDeleteItem={onDeleteItem}
 									onCheckedItem={onCheckedItem}
+									onRenameItem={onRenameItem}
 								/>
 							</div>
 						)
